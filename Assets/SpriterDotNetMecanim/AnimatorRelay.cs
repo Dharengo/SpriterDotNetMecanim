@@ -9,24 +9,17 @@ namespace SpriterDotNetMecanim {
 	/// </summary>
 	public class AnimatorRelay : StateMachineBehaviour {
 		[HideInInspector] public TransitionList CustomTransitions;
-		public AnimatorRelay testRelay;
-		public RelayDebugger debugger;
-		public string Name;
 		/// <summary>
 		/// Not meant to be called manually.
 		/// </summary>
 		public override void OnStateEnter (Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 			var assistant = animator.GetComponent<AnimatorAssist> ();
 			if (assistant) assistant.Transition (this, stateInfo.shortNameHash, layerIndex);
-			//if (testRelay == null) testRelay = this;
-			Debug.Log (Name);
-			Debug.Log (CustomTransitions [Animator.StringToHash("idle")]);
-			Debug.Log (testRelay == this);
 		}
 
 		[Serializable] public class TransitionList : IEnumerable<TransitionList.CustomTransition> {
-			private List<int> TargetIDS = new List<int> ();
-			private List<float> Durations = new List<float> ();
+			[SerializeField] private List<int> TargetIDS = new List<int> ();
+			[SerializeField] private List<float> Durations = new List<float> ();
 
 			public int Count { get { return TargetIDS.Count; } }
 

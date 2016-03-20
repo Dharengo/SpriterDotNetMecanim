@@ -22,7 +22,6 @@ namespace SpriterDotNetMecanim.Editor {
 				if (!trans) toRemove.Add (transition.TargetID);
 			}
 			foreach (var id in toRemove) target.CustomTransitions [id] = -1f;
-			target.testRelay = target;
 		}
 
 		private static bool Match (AnimatorStateTransition transition, int stateID) {

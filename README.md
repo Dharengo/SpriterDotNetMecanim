@@ -7,3 +7,4 @@ An add-on for SpriterDotNet.Unity that bridges the gap between some of Unity's M
 -(re)Import your .scml file  
 -Use the created AnimatorController as you normally would in a Unity project  
 -You can alter the transition duration of all animations globally by editing that property in the AnimatorAssist component  
+-You can also specify transition durations for individual transitions through the AnimatorRelay behaviours within the animation states  

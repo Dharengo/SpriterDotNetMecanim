@@ -33,15 +33,9 @@ namespace SpriterDotNetMecanim {
 		/// Not meant to be called manually.
 		/// </summary>
 		public void Transition (AnimatorRelay relay, int animationID, int layerID) {
-//			if (Relays.ContainsKey (Animator.StringToHash ("hit_0"))) {
-//				Debug.Log (Relays [Animator.StringToHash ("hit_0")].CustomTransitions [Animator.StringToHash ("idle")]);
-//			}
 			if (!Relays.ContainsKey (animationID)) {
 				Relays.Add (animationID, relay);
 			}
-//			foreach (var rrelay in Relays.Values) {
-//				Debug.Log (rrelay == relay);
-//			}
 			string animation;
 			var length = GlobalTransitionDuration;
 			if (MecanimAnimator.IsInTransition (layerID)) {
@@ -54,11 +48,6 @@ namespace SpriterDotNetMecanim {
 			}
 			if (Animations.TryGetValue (animationID, out animation))
 				SpriterAnimator.Transition (animation, length);
-			//Debug.Log (length);
-		}
-
-		public void TestThis (AnimatorRelay hitrelay) {
-//			Debug.Log (hitrelay == Relays [Animator.StringToHash ("hit_0")]);
 		}
 	}
 }
