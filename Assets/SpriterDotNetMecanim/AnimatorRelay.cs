@@ -8,7 +8,11 @@ namespace SpriterDotNetMecanim {
 	/// Sends messages from the AnimatorController to the AnimatorAssist component.
 	/// </summary>
 	public class AnimatorRelay : StateMachineBehaviour {
+		/// <summary>
+		/// Entries for transitions with custom durations
+		/// </summary>
 		[HideInInspector] public TransitionList CustomTransitions;
+
 		/// <summary>
 		/// Not meant to be called manually.
 		/// </summary>
@@ -17,6 +21,9 @@ namespace SpriterDotNetMecanim {
 			if (assistant) assistant.Transition (this, stateInfo.shortNameHash, layerIndex);
 		}
 
+		/// <summary>
+		/// Poverty dictionary. It's poverty, but Unity can serialize it. The list shouldn't get long enough for it to matter anyway.
+		/// </summary>
 		[Serializable] public class TransitionList : IEnumerable<TransitionList.CustomTransition> {
 			[SerializeField] private List<int> TargetIDS = new List<int> ();
 			[SerializeField] private List<float> Durations = new List<float> ();

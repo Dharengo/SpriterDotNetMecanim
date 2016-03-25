@@ -27,7 +27,6 @@ namespace SpriterDotNetMecanim.Editor {
 			var controller = GetController (prefab);
 			ProcessAnimations (entity.Animations, controller);
 			if (MecanimDone != null) MecanimDone (entity, prefab, controller);
-
 		}
 
 		private static AnimatorAssist GetAssistant (GameObject prefab) {
@@ -38,7 +37,7 @@ namespace SpriterDotNetMecanim.Editor {
 
 		private static AnimatorController GetController (GameObject prefab) {
 			var animator = prefab.GetComponent<Animator> ();
-			var controller = animator.runtimeAnimatorController as AnimatorController;
+			var controller = GetNestedController (animator.runtimeAnimatorController);
 			if (!controller) {
 				var path = Path.Combine (Path.GetDirectoryName (AssetDatabase.GetAssetPath (prefab)), prefab.name + ".controller");
 				controller = AssetDatabase.LoadAssetAtPath<AnimatorController> (path);
@@ -48,26 +47,42 @@ namespace SpriterDotNetMecanim.Editor {
 			return controller;
 		}
 
+		private static AnimatorController GetNestedController (RuntimeAnimatorController controller) {
+			var aoc = controller as AnimatorOverrideController;
+			if (aoc) return GetNestedController (aoc.runtimeAnimatorController);
+			else return controller as AnimatorController;
+		}
+
 		private static void ProcessAnimations (SpriterAnimation[] animations, AnimatorController controller) {
+			if (ArrayUtility.Find (controller.parameters, x => x.name == AnimatorAssist.AnimDoneTrigger) == null)
+				controller.AddParameter (AnimatorAssist.AnimDoneTrigger, AnimatorControllerParameterType.Trigger);
 			var unused = new HashSet<string> ();
 			foreach (var animation in animations)
 				unused.Add (animation.Name);
-			foreach (var layer in controller.layers)
+			foreach (var layer in controller.layers) {
 				foreach (var state in layer.stateMachine.states)
 					if (unused.Contains (state.state.name)) {
 						unused.Remove (state.state.name);
 						ProcessState (state.state);
 					}
+				ProcessAnyState (layer.stateMachine);
+			}
 			var machine = controller.layers [0].stateMachine;
 			foreach (var animation in unused) {
 				var state = machine.AddState (animation);
 				ProcessState (state);
 			}
+
 		}
 
 		private static void ProcessState (AnimatorState state) {
 			if (!ArrayUtility.Find (state.behaviours, x => x is AnimatorRelay)) 
 				state.AddStateMachineBehaviour<AnimatorRelay> ();
+		}
+
+		private static void ProcessAnyState (AnimatorStateMachine machine) {
+			if (!ArrayUtility.Find (machine.behaviours, x => x is AnyStateRelay)) 
+				machine.AddStateMachineBehaviour<AnyStateRelay> ();
 		}
 	}
 }
