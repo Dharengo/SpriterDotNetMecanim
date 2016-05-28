@@ -25,7 +25,7 @@ namespace SpriterDotNetMecanim.Editor {
 			if (target.CustomTransitions == null) target.CustomTransitions = new AnimatorRelay.TransitionList ();
 			CheckCorrectUse ();
 			var toRemove = new List<int> ();
-			foreach (var transition in target.CustomTransitions) {
+			foreach (AnimatorRelay.TransitionList.CustomTransition transition in target.CustomTransitions) {
 				var trans = ArrayUtility.Find (GetTransitions (), x => Match (x, transition.TargetID));
 				if (!trans) toRemove.Add (transition.TargetID);
 			}
@@ -45,7 +45,7 @@ namespace SpriterDotNetMecanim.Editor {
 			if (target.CustomTransitions.Count <= 0)
 				EditorGUILayout.LabelField ("No custom transitions have been set.");
 			else EditorGUILayout.LabelField ("Custom transition durations (in milliseconds):");
-			foreach (var transition in target.CustomTransitions) {
+			foreach (AnimatorRelay.TransitionList.CustomTransition transition in target.CustomTransitions) {
 				EditorGUILayout.BeginHorizontal ();
 				EditorGUI.BeginChangeCheck ();
 				var newID = Transitions (transition.TargetID);
