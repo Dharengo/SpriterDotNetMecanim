@@ -60,12 +60,7 @@ namespace SpriterDotNetMecanim.Editor {
 			foreach (var animation in animations)
 				unused.Add (animation.Name);
 			foreach (var layer in controller.layers) {
-				foreach (var state in layer.stateMachine.states)
-					if (unused.Contains (state.state.name)) {
-						unused.Remove (state.state.name);
-						ProcessState (state.state);
-					}
-				ProcessAnyState (layer.stateMachine);
+				RemoveUsedAnimations (layer.stateMachine, ref unused);
 			}
 			var machine = controller.layers [0].stateMachine;
 			foreach (var animation in unused) {
@@ -73,6 +68,19 @@ namespace SpriterDotNetMecanim.Editor {
 				ProcessState (state);
 			}
 
+		}
+
+		private static void RemoveUsedAnimations (AnimatorStateMachine stateMachine, ref HashSet<string> unused) {
+			foreach (var state in stateMachine.states) {	
+				if (unused.Contains (state.state.name)) {
+					unused.Remove (state.state.name);
+					ProcessState (state.state);
+				}
+			}
+			foreach (ChildAnimatorStateMachine childStateMachine in stateMachine.stateMachines) {
+				RemoveUsedAnimations (childStateMachine.stateMachine, ref unused);
+			}
+			ProcessAnyState (stateMachine);
 		}
 
 		private static void ProcessState (AnimatorState state) {
