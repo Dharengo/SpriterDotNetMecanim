@@ -6,14 +6,14 @@ using SpriterDotNetUnity;
 
 namespace SpriterDotNetMecanim {
 	/// <summary>
-	/// Bridges communications between AnimatorController and UnitySpriterAnimator.
+	/// Bridges communications between AnimatorController and UnityAnimator.
 	/// </summary>
 	[RequireComponent (typeof(SpriterDotNetBehaviour), typeof (Animator))]
 	public class AnimatorAssist : MonoBehaviour {
 		public const string AnimDoneTrigger = "Animation_Finished";
 
 		private Animator MecanimAnimator;
-		private UnitySpriterAnimator SpriterAnimator;
+		private UnityAnimator SpriterAnimator;
 		private Dictionary<int, string> Animations = new Dictionary<int, string> ();
 		private Dictionary<int, AnimatorRelay> Relays = new Dictionary<int, AnimatorRelay> ();
 		private AnyStateRelay[] AnyStates = new AnyStateRelay [0];
